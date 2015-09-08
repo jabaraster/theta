@@ -23229,15 +23229,46 @@ var ajax = require('./component/app-ajax.js');
 var PropertyList = React.createClass({
     displayName: 'PropertyList',
 
+    propTypes: {
+        data: React.PropTypes.array.isRequired
+    },
+    handleClick: function handleClick(pProperty) {
+        console.log(pProperty);
+    },
+    render: function render() {
+        var _this = this;
+
+        return React.createElement(
+            'ul',
+            { className: 'PropertyList' },
+            this.props.data.map(function (pProperty) {
+                return React.createElement(
+                    'li',
+                    { className: 'property', onClick: _this.handleClick.bind(_this, pProperty) },
+                    pProperty.Name
+                );
+            })
+        );
+    }
+});
+
+var Rooms = React.createClass({
+    displayName: 'Rooms',
+
+    propTypes: {
+        data: React.PropTypes.array.isRequired
+    },
     render: function render() {
         return React.createElement(
-            'div',
-            { className: 'PropertyList' },
-            React.createElement(
-                'h2',
-                null,
-                'PropertyList'
-            )
+            'ul',
+            { className: 'Rooms' },
+            this.props.data.map(function (pRoom) {
+                return React.createElement(
+                    'li',
+                    { className: 'room' },
+                    pRoom.Name
+                );
+            })
         );
     }
 });
@@ -23245,16 +23276,21 @@ var PropertyList = React.createClass({
 var Page = React.createClass({
     displayName: 'Page',
 
+    getInitialState: function getInitialState() {
+        return {
+            properties: [{ Name: 'ザ・熊本タワー',
+                Rooms: [{ Name: '101号室' }, { Name: '905号室' }]
+            }, { Name: '森都心プラザ',
+                Rooms: [{ Name: '２階プラザ' }, { Name: '２階図書館' }, { Name: '３階ビジネス図書館' }, { Name: '５階大ホール' }]
+            }]
+        };
+    },
     render: function render() {
         return React.createElement(
             'div',
             { className: 'Page' },
-            React.createElement(
-                'h1',
-                null,
-                'Page'
-            ),
-            React.createElement(PropertyList, null)
+            React.createElement(PropertyList, { data: this.state.properties }),
+            React.createElement(Rooms, { data: [] })
         );
     }
 });

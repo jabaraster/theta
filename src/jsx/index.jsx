@@ -16,23 +16,60 @@ const TabPane = Bootstrap.TabPane;
 const ajax = require('./component/app-ajax.js');
 
 const PropertyList = React.createClass({
+    propTypes: {
+        data: React.PropTypes.array.isRequired,
+    },
+    handleClick: function(pProperty) {
+        console.log(pProperty);
+    },
     render: function() {
         return (
-            <div className="PropertyList">
-                <h2>PropertyList</h2>
-            </div>
+            <ul className="PropertyList">
+            {this.props.data.map((pProperty) => {
+                return (
+                    <li className="property" onClick={this.handleClick.bind(this, pProperty)}>{pProperty.Name}</li>
+                );
+            })}
+            </ul>
         );
     },
 });
 
-const 
+const Rooms = React.createClass({
+    propTypes: {
+        data: React.PropTypes.array.isRequired,
+    },
+    render: function() {
+        return (
+            <ul className="Rooms">
+            {this.props.data.map((pRoom) => {
+                return (
+                    <li className="room">{pRoom.Name}</li>
+                );
+            })}
+            </ul>
+        );
+    },
+});
 
 const Page = React.createClass({
+    getInitialState: function() {
+        return {
+            properties: [
+            {   Name: 'ザ・熊本タワー',
+                Rooms: [{ Name: '101号室' }, { Name: '905号室' }, ]
+            },
+            {   Name: '森都心プラザ',
+                Rooms: [{ Name: '２階プラザ' }, { Name: '２階図書館' }, { Name: '３階ビジネス図書館' }, { Name: '５階大ホール' }, ]
+            },
+            ],
+        };
+    },
     render: function() {
         return (
             <div className="Page">
-                <h1>Page</h1>
-                <PropertyList />
+                <PropertyList data={this.state.properties} />
+                <Rooms data={[]} />
             </div>
         );
     },
