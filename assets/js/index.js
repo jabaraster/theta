@@ -23230,45 +23230,54 @@ var PropertyList = React.createClass({
     displayName: 'PropertyList',
 
     propTypes: {
-        data: React.PropTypes.array.isRequired
+        data: React.PropTypes.array.isRequired,
+        onPropertyClick: React.PropTypes.func.isRequired
     },
     handleClick: function handleClick(pProperty) {
-        console.log(pProperty);
+        this.props.onPropertyClick({ property: pProperty });
     },
     render: function render() {
         var _this = this;
 
         return React.createElement(
-            'ul',
+            'div',
             { className: 'PropertyList' },
-            this.props.data.map(function (pProperty) {
-                return React.createElement(
-                    'li',
-                    { className: 'property', onClick: _this.handleClick.bind(_this, pProperty) },
-                    pProperty.Name
-                );
-            })
+            React.createElement(
+                'ul',
+                { className: 'properties' },
+                this.props.data.map(function (pProperty) {
+                    return React.createElement(
+                        'li',
+                        { className: 'property', onClick: _this.handleClick.bind(_this, pProperty) },
+                        pProperty.Name
+                    );
+                })
+            )
         );
     }
 });
 
-var Rooms = React.createClass({
-    displayName: 'Rooms',
+var RoomList = React.createClass({
+    displayName: 'RoomList',
 
     propTypes: {
         data: React.PropTypes.array.isRequired
     },
     render: function render() {
         return React.createElement(
-            'ul',
-            { className: 'Rooms' },
-            this.props.data.map(function (pRoom) {
-                return React.createElement(
-                    'li',
-                    { className: 'room' },
-                    pRoom.Name
-                );
-            })
+            'div',
+            { className: 'RoomList' },
+            React.createElement(
+                'ul',
+                { className: 'rooms' },
+                this.props.data.map(function (pRoom) {
+                    return React.createElement(
+                        'li',
+                        { className: 'room' },
+                        pRoom.Name
+                    );
+                })
+            )
         );
     }
 });
@@ -23280,17 +23289,33 @@ var Page = React.createClass({
         return {
             properties: [{ Name: 'ザ・熊本タワー',
                 Rooms: [{ Name: '101号室' }, { Name: '905号室' }]
+            }, { Name: 'ザ・熊本タワー1',
+                Rooms: [{ Name: '101号室' }, { Name: '905号室' }]
+            }, { Name: 'ザ・熊本タワー2',
+                Rooms: [{ Name: '101号室' }, { Name: '905号室' }]
+            }, { Name: 'ザ・熊本タワー3',
+                Rooms: [{ Name: '101号室' }, { Name: '905号室' }]
             }, { Name: '森都心プラザ',
                 Rooms: [{ Name: '２階プラザ' }, { Name: '２階図書館' }, { Name: '３階ビジネス図書館' }, { Name: '５階大ホール' }]
-            }]
+            }, { Name: '森都心プラザ1',
+                Rooms: [{ Name: '２階プラザ' }, { Name: '２階図書館' }, { Name: '３階ビジネス図書館' }, { Name: '５階大ホール' }]
+            }, { Name: '森都心プラザ2',
+                Rooms: [{ Name: '２階プラザ' }, { Name: '２階図書館' }, { Name: '３階ビジネス図書館' }, { Name: '５階大ホール' }]
+            }, { Name: '森都心プラザ3',
+                Rooms: [{ Name: '２階プラザ' }, { Name: '２階図書館' }, { Name: '３階ビジネス図書館' }, { Name: '５階大ホール' }]
+            }],
+            currentRooms: []
         };
+    },
+    handlePropertyClick: function handlePropertyClick(e) {
+        this.setState({ currentRooms: e.property.Rooms });
     },
     render: function render() {
         return React.createElement(
             'div',
             { className: 'Page' },
-            React.createElement(PropertyList, { data: this.state.properties }),
-            React.createElement(Rooms, { data: [] })
+            React.createElement(PropertyList, { data: this.state.properties, onPropertyClick: this.handlePropertyClick }),
+            React.createElement(RoomList, { data: this.state.currentRooms })
         );
     }
 });
